@@ -13,7 +13,7 @@ return array(
 	|
 	*/
 
-	'debug' => false,
+	'debug' => true,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -26,7 +26,7 @@ return array(
 	|
 	*/
 
-	'url' => 'http://localhost',
+	'url' => 'http://inpost.dev',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -122,6 +122,11 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
+		'Robbo\Presenter\PresenterServiceProvider',
+
+		'Repositories\InpostApi\InpostApiRepositoryServiceProvider',
+    	'Services\InpostApi\InpostApiServiceServiceProvider',
+
 	),
 
 	/*
@@ -188,6 +193,8 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
+
+		'InpostApi' => 'Services\InpostApi\InpostApiFacade',
 
 	),
 
