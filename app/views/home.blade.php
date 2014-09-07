@@ -12,4 +12,5 @@
 
 @section('content')
 	<h1>Main page!</h1>
+	<p>Welcome, {{ $customer['email'] }}</p>
 @stop

@@ -24,11 +24,15 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment(array(
+$env = $app->detectEnvironment(function() {
+	return 'local';
+});
 
-	'local' => array('homestead'),
-
-));
+/*
+array(
+	'local' => array('inpost.dev'),
+)
+ */
 
 /*
 |--------------------------------------------------------------------------

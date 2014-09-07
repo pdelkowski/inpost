@@ -6,7 +6,10 @@
 	"require": {
 		"laravel/framework": "4.2.*",
 		"kirkbushell/fatty": "*@dev",
-		"robclancy/presenter": "1.3.*"
+		"robclancy/presenter": "1.3.*",
+		"guzzlehttp/guzzle": "~4.0",
+		"guzzlehttp/oauth-subscriber": "0.1.*",
+		"commerceguys/guzzle-oauth2-plugin": "*"
 	},
 	"autoload": {
 		"classmap": [

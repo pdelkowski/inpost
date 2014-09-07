@@ -3,28 +3,62 @@
 namespace Repositories\InpostApi;
 
 use \stdClass;
+use \Guzzle\Http\Client;
+use \CommerceGuys\Guzzle\Plugin\Oauth2\Oauth2Plugin;
 
-class InpostApiRepository extends \Repositories\BaseRepository implements InpostApiInterface, \Robbo\Presenter\PresentableInterface {
+class InpostApiRepository extends \Repositories\BaseRepository implements InpostApiInterface {
 
 	use \KirkBushell\Fatty\Context;
 
 	/**
-	 * Returns the instance of Inpost API
+	 * Var holds an API address
 	 * 
-	 * @return stdClass
+	 * @var string
 	 */
-	public function getInstance() {
-		echo 'I got the instance';
-		die;
-	}
+	private $_api_address;
 
 	/**
-	 * Returns all user's packages
+	 * Var holds a API token
 	 * 
-	 * @return \Collection
+	 * @var string
 	 */
-	public function getPackages() {
-		echo 'I got your packages';
+	private $_api_token;
+
+	/**
+	 * Var holds client API object
+	 * @var GuzzleHttp\Client Object
+	 */
+	private $client;
+
+
+	/**
+	 * Constructor, set connection
+	 */
+	public function __construct() {
+		$this->_api_address 	= $_ENV['INPOST_API_ADDRESS'];
+		$this->_api_version		= $_ENV['INPOST_API_VERSION'];
+		$this->_api_token 		= $_ENV['INPOST_API_TOKEN'];
+
+		$accessToken = array('access_token' => 'f41052b8fc8dc925e1d73b0e9e553bd6b4b9eb21d5fb315227dbea78f0461481');
+		$oauth2Plugin = new Oauth2Plugin();
+		$oauth2Plugin->setAccessToken($accessToken);
+
+		$this->client = new Client("$this->_api_address/{version}", array('version' => $this->_api_version));
+		$this->client->addSubscriber($oauth2Plugin);
+	}
+
+	public function getCustomerByEmail($email) {
+
+		try {
+		    $request = $this->client->get("customers/$email"); 
+		    $response = $request->send();
+		} catch (RequestException $e) {
+		    if ($e->hasResponse()) {
+		        $response = $e->getResponse() . "\n";
+		    }
+		}
+
+		return $response;
 	}
 
 	/**
@@ -34,15 +68,5 @@ class InpostApiRepository extends \Repositories\BaseRepository implements Inpost
 		// return $inpostApi ? (object) $inpostApi->toArray() : null;
 		return $inpostApi;
 	}
-
-	/**
-     * Return a created presenter.
-     *
-     * @return Robbo\Presenter\Presenter
-     */
-    public function getPresenter()
-    {
-        return new \Presenter\InpostApiPresenter($this);
-    }
 
 }

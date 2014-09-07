@@ -16,7 +16,7 @@ class InpostApiRepositoryServiceProvider extends ServiceProvider {
         // Bind the returned class to the namespace 'Repositories\InpostApiInterface
         $this->app->bind('Repositories\InpostApi\InpostApiInterface', function($app)
         {
-            return new InpostApiRepository(new InpostApi());
+            return new InpostApiRepository(new \InpostApi());
         });
     }
 }

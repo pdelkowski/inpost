@@ -21,15 +21,8 @@ Route::get('/hello', function()
 	return View::make('hello');
 });
 
-Route::get('/service', function() {
-	echo '<pre>';
-	echo "<h1>Checking DDD architecture</h1>";
-	//return InpostApi::getInpostApi();
-	$api = InpostApi::getInpostApi();
-	echo $api->getPackages();
-	echo $api->getPresenter()->presentUrl();
-	echo '<br>';
-	$api->extend('Entities\InpostApiEntity');
-	$api->print_hello();
-	die;
-});
+Route::get('/service', array(
+	'uses' => 'HomeController@hello',
+    'as' => 'home'
+));
+
