@@ -9,19 +9,20 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Start Bootstrap</a>
+            <a class="navbar-brand" href="/">Home</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="#">About</a>
+                    <a href="{{ route('customer-show') }}">Customer</a>
                 </li>
                 <li>
-                    <a href="#">Services</a>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
+                    <a href="{{ route('parcels-show') }}" class="dropdown-toggle" data-toggle="dropdown">Percels <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="{{ route('parcels-show') }}">View Percels</a></li>
+                        <li><a href="{{ route('parcel-create') }}">New Percel</a></li>
+                    </ul>
                 </li>
             </ul>
         </div>

@@ -11,18 +11,38 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('home');
-});
 
-Route::get('/hello', function()
-{
-	return View::make('hello');
-});
-
-Route::get('/service', array(
-	'uses' => 'HomeController@hello',
+Route::get('/', array(
+	'uses' => 'HomeController@home',
     'as' => 'home'
 ));
 
+Route::get('/customer', array(
+	'uses' => 'HomeController@showCustomer',
+    'as' => 'customer-show'
+));
+
+Route::get('/parcels', array(
+	'uses' => 'HomeController@showParcels',
+    'as' => 'parcels-show'
+));
+
+Route::get('/parcels/create', array(
+	'uses' => 'HomeController@createParcelForm',
+    'as' => 'parcel-create'
+));
+
+Route::post('/parcels/create', array(
+	'uses' => 'HomeController@createParcel',
+    'as' => 'parcel-create-post'
+));
+
+Route::get('/parcels/pay/{id}', array(
+	'uses' => 'HomeController@payParcel',
+    'as' => 'parcel-pay'
+));
+
+Route::get('/parcels/cancel/{id}', array(
+	'uses' => 'HomeController@cancelParcel',
+    'as' => 'parcel-cancel'
+));

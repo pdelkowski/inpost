@@ -5,6 +5,7 @@ namespace Repositories\InpostApi;
 use \stdClass;
 use \Guzzle\Http\Client;
 use \CommerceGuys\Guzzle\Plugin\Oauth2\Oauth2Plugin;
+use \Guzzle\Http\Exception\ClientErrorResponseException as ResponseException;
 
 class InpostApiRepository extends \Repositories\BaseRepository implements InpostApiInterface {
 
@@ -47,18 +48,97 @@ class InpostApiRepository extends \Repositories\BaseRepository implements Inpost
 		$this->client->addSubscriber($oauth2Plugin);
 	}
 
+	/**
+	 * API call for customer details
+	 * 
+	 * @param  string $email
+	 * @return Guzzle\Http\Message\Response API call response
+	 */
 	public function getCustomerByEmail($email) {
 
 		try {
 		    $request = $this->client->get("customers/$email"); 
 		    $response = $request->send();
-		} catch (RequestException $e) {
-		    if ($e->hasResponse()) {
-		        $response = $e->getResponse() . "\n";
-		    }
+		} catch (ResponseException $e) {
+	        $response = $e->getResponse();
+		    
 		}
 
 		return $response;
+	}
+
+	/**
+	 * API call to get all customer's parcels
+	 * 
+	 * @param  string $email
+	 * @return Guzzle\Http\Message\Response API call response
+	 */
+	public function getParcels($email) {
+
+		try {
+			$request = $this->client->get("customers/$email/parcels");
+			$response = $request->send();
+
+		} catch (ResponseException $e) {
+			$response = $e->getResponse();
+		}
+
+		return $response;
+	}
+
+	/**
+	 * API call to create new parcel
+	 * 
+	 * @param  array $postFields Array with POST fields
+	 * @param  string $email
+	 * @return Guzzle\Http\Message\Response API call response
+	 */
+	public function createParcel($postFields, $email) {
+
+        try {
+        	$request = $this->client->post("customers/$email/parcels", array(), $postFields);
+        	$response = $request->send();
+        } catch (ResponseException $e) {
+			$response = $e->getResponse();
+		}
+
+		return $response;
+	}
+
+	/**
+	 * API call to pay for the parcel
+	 * 
+	 * @param  string $parcel_id
+	 * @return Guzzle\Http\Message\Response API call response
+	 */
+	public function payParcel($parcel_id) {
+
+		try {
+			$request = $this->client->post("parcels/$parcel_id/pay");
+        	$response = $request->send();
+        } catch (ResponseException $e) {
+			$response = $e->getResponse();
+		}
+
+        return $response;
+	}
+
+	/**
+	 * API call to cancel the parcel
+	 * 
+	 * @param  string $parcel_id
+	 * @return Guzzle\Http\Message\Response API call response
+	 */
+	public function cancelParcel($parcel_id) {
+
+		try {
+			$request = $this->client->post("parcels/$parcel_id/cancel");
+        	$response = $request->send();
+        } catch (ResponseException $e) {
+			$response = $e->getResponse();
+		}
+
+        return $response;
 	}
 
 	/**
@@ -66,7 +146,6 @@ class InpostApiRepository extends \Repositories\BaseRepository implements Inpost
 	 */
 	protected function convertFormat($inpostApi) {
 		// return $inpostApi ? (object) $inpostApi->toArray() : null;
-		return $inpostApi;
 	}
 
 }

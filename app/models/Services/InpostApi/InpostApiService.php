@@ -7,8 +7,19 @@ use Repositories\InpostApi\InpostApiInterface;
 */
 class InpostApiService implements \Robbo\Presenter\PresentableInterface
 {
-    // Containing our InpostApiRepository to make all our database calls to
+    /**
+     * Holds InpostApiRepository to access Data Persistence Layer (database
+     * )
+     * @var InpostApiInterface
+     */
     protected $inpostRepo;
+
+    /**
+     * Var holds customer email to make calls easier, no need to pass email arg every time
+     * 
+     * @var string
+     */
+    protected $_customer_email = NULL;
     
     /**
     * Loads our $inpostApiRepo with the actual Repo associated with our InpostApiInterface
@@ -19,6 +30,17 @@ class InpostApiService implements \Robbo\Presenter\PresentableInterface
     public function __construct(InpostApiInterface $inpostApiRepo)
     {
         $this->inpostRepo = $inpostApiRepo;
+        $this->_customer_email = '';
+    }
+
+    /**
+     * Helper method which stores customer email so you dont have to pass customer email for many calls
+     * 
+     * @param  string $email Customer email to store
+     * @return [type]        [description]
+     */
+    public function storeCustomerEmail($email) {
+        $this->_customer_email = $email;
     }
 
     /**
@@ -43,13 +65,61 @@ class InpostApiService implements \Robbo\Presenter\PresentableInterface
         return $this->inpostRepo;
     }
 
-    public function getCustomer($email) {
-        $customer = $this->inpostRepo->getCustomerByEmail($email);
+    /**
+     * Return customer details
+     * 
+     * @param  string $email Customer email
+     * @return Guzzle\Http\Message\Response API call response
+     */
+    public function getCustomer($email = NULL) {
+        $email = !$email ? $this->_customer_email : $email;
 
-        if( $customer->getStatusCode() == 200 )
-            return $customer->json();
-        else
-            return false;
+        return $this->inpostRepo->getCustomerByEmail($email);
+    }
+
+    /**
+     * Get all customer's parcels
+     * 
+     * @param  string $email Customer email
+     * @return Guzzle\Http\Message\Response API call response
+     */
+    public function getCustomerParcels($email = NULL) {
+        $email = !$email ? $this->_customer_email : $email;
+
+        return $this->inpostRepo->getParcels($email);
+    }
+
+    /**
+     * Create new parcel
+     * 
+     * @param  array $parcel_data Array with post fields to create new parcel
+     * @param  string $email Customer email
+     * @return Guzzle\Http\Message\Response API call response
+     */
+    public function createParcel($parcel_data, $email = NULL) {
+        $email = !$email ? $this->_customer_email : $email;
+
+        return $this->inpostRepo->createParcel($parcel_data, $email);
+    }
+
+    /**
+     * Pay for the parcel
+     * 
+     * @param  string $parcel_id Parcel id for which you want to pay
+     * @return Guzzle\Http\Message\Response API call response
+     */
+    public function payParcel($parcel_id) {
+        return $this->inpostRepo->payParcel($parcel_id);
+    }
+
+    /**
+     * Cancel the parcel
+     * 
+     * @param  string $parcel_id Id of the parcel you want to cancel
+     * @return Guzzle\Http\Message\Response API call response
+     */
+    public function cancelParcel($parcel_id) {
+        return $this->inpostRepo->cancelParcel($parcel_id);
     }
 
     /**
