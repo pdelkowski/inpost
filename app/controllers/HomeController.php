@@ -35,12 +35,7 @@ class HomeController extends BaseController {
 	 * @return Robbo\Presenter\View\View
 	 */
 	public function home() {
-		
-		$customer = $this->api->getCustomer();
-		$parcels = $this->api->getCustomerParcels();
-
-		return 	View::make('home')
-				->with('customer', $customer);
+		return 	View::make('home');
 	}
 
 	/**

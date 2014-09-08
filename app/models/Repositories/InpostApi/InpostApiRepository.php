@@ -40,7 +40,7 @@ class InpostApiRepository extends \Repositories\BaseRepository implements Inpost
 		$this->_api_version		= $_ENV['INPOST_API_VERSION'];
 		$this->_api_token 		= $_ENV['INPOST_API_TOKEN'];
 
-		$accessToken = array('access_token' => 'f41052b8fc8dc925e1d73b0e9e553bd6b4b9eb21d5fb315227dbea78f0461481');
+		$accessToken = array('access_token' => "$this->_api_token");
 		$oauth2Plugin = new Oauth2Plugin();
 		$oauth2Plugin->setAccessToken($accessToken);
 
